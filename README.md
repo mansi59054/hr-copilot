@@ -15,6 +15,29 @@ A naive RAG bot retrieves whatever matches and confidently answers from the stal
 
 Try it: "How many days per week can UK employees work remotely?" The 2024 handbook says 2. A Slack announcement from HR says 3 from Jan 2026. The correct answer is 3, with the conflict surfaced — and the eval suite fails the build if that stops working.
 
+
+
+Current baseline: **hit-rate 1.00, MRR 0.88** on the retrieval layer.
+
+### The eval catching a real bug
+
+First full end-to-end run: 7/8. The India meal-expense case failed even though
+retrieval was perfect (rank 0).
+
+
+Inspecting the live answer showed the system was right ("INR 2,000 per day",
+correctly cited) — the eval's substring check for "2000" was brittle against
+the thousands separator. Fixed the test, not the model:
+
+
+That's the point of the harness: it flagged a discrepancy, retrieval metrics
+localized it to the generation layer, and inspection showed a false negative
+in the eval itself.
+
+
+
+
+
 ## Architecture
 
 ```
