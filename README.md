@@ -24,13 +24,13 @@ Current baseline: **hit-rate 1.00, MRR 0.88** on the retrieval layer.
 First full end-to-end run: 7/8. The India meal-expense case failed even though
 retrieval was perfect (rank 0).
 
-![End-to-end evals before the fix: 7 of 8 passing](EVAL1_7/8.png)
+![End-to-end evals before the fix: 7 of 8 passing](EVAL1_7:8.png)
 
 Inspecting the live answer showed the system was right ("INR 2,000 per day",
 correctly cited) — the eval's substring check for "2000" was brittle against
 the thousands separator. Fixed the test, not the model:
 
-![End-to-end evals after the fix: 8 of 8 passing](EVAL2_8/8.png)
+![End-to-end evals after the fix: 8 of 8 passing](EVAL2_8:8.png)
 
 That's the point of the harness: it flagged a discrepancy, retrieval metrics
 localized it to the generation layer, and inspection showed a false negative
