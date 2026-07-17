@@ -3,3 +3,4 @@ __pycache__/
 data/processed/
 .env
 eval_out.txt
+.DS_Store
