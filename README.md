@@ -15,7 +15,7 @@ A naive RAG bot retrieves whatever matches and confidently answers from the stal
 
 Try it: "How many days per week can UK employees work remotely?" The 2024 handbook says 2. A Slack announcement from HR says 3 from Jan 2026. The correct answer is 3, with the conflict surfaced — and the eval suite fails the build if that stops working.
 
-
+Demo_LLM.png
 
 Current baseline: **hit-rate 1.00, MRR 0.88** on the retrieval layer.
 
