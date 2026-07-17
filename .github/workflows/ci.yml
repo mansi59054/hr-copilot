@@ -1,0 +1,28 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt pytest
+      - name: Build index
+        run: python scripts/build_index.py
+      - name: Unit tests
+        run: pytest tests/ -v
+      - name: Retrieval eval gate (no LLM needed)
+        run: |
+          python -m src.eval.run_eval | tee eval_out.txt
+          python - << 'PY'
+          import json, re
+          text = open("eval_out.txt").read()
+          m = re.search(r"\{.*?\}\s*\}", text, re.S)
+          metrics = json.loads(m.group(0))["retrieval"]
+          assert metrics["hit_rate"] >= 0.85, f"hit_rate regressed: {metrics}"
+          assert metrics["mrr"] >= 0.6, f"MRR regressed: {metrics}"
+          print("eval gate passed:", metrics)
+          PY
